@@ -7,8 +7,9 @@ public class TicTacToe {
     static final int COMPUTER =2;    //computer
     static int currentPlayer;
     static int winner;
-    static char player1letter=' ';
-    static char player2letter=' ';
+    static char playerLetter =' ';
+    static char computerLetter =' ';
+    static int moveCount;
     static Scanner scanner=new Scanner(System.in);
     static char []board=new char[]{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',};
 
@@ -16,36 +17,43 @@ public class TicTacToe {
         int position;
         System.out.println("Welcome to Tic Tac Toe Game");
         
-        player1letter=chooseLetter();
-        player2letter=(player1letter == 'O') ? 'X': 'O';
+        playerLetter =chooseLetter();
+        computerLetter =(playerLetter == 'O') ? 'X': 'O';
 
-        System.out.println("player1letter = "+player1letter);
-        System.out.println("player2letter = "+player2letter);
+        System.out.println("player1letter = "+ playerLetter);
+        System.out.println("player2letter = "+ computerLetter);
 
         currentPlayer=doToss();
         showBoard();
 
-       while (winner == 0){
+       while (winner == 0 && moveCount<9){
            if (currentPlayer == PLAYER_1) {
                System.out.println("your turn select position");
                position=scanner.nextInt();
-               selectPosition(position,player1letter);
+               selectPosition(position, playerLetter);
            }else {
                System.out.println("computer turn");
                Thread.sleep(1000);
                position= getPosition();
-               selectPosition(position,player2letter);
+               selectPosition(position, computerLetter);
            }
            showBoard();
            winner=checkWinner();
 
            //switch current player
            currentPlayer=(currentPlayer == PLAYER_1) ? COMPUTER : PLAYER_1;
+           moveCount++;
+
+           if (moveCount == 9) {
+               System.out.println("Match is draw ");
+               System.out.println("1.Play again \n2.Exit");
+               resetGame(scanner.nextInt());
+           }
 
        }
         if (winner == PLAYER_1) {
             System.out.println("Congratulaions...\nyou won the game");
-        }else {
+        }else if (winner == COMPUTER) {
             System.out.println("you lost the game");
         }
     }
@@ -95,59 +103,102 @@ public class TicTacToe {
         }
     }
 
+    static void resetGame(int x){
+        if (x == 1) {
+            for (int i = 0; i < 10; i++) {
+                board[i]=' ';
+            }
+            winner=0;
+            moveCount=0;
+        }
+    }
+
     static int checkWinner(){
         if (board[1] == board[2] && board[2] == board[3] && board[2] !=' ') {
-            return  (board[1] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[1] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[4] == board[5] && board[5] == board[6] && board[5] !=' ') {
-            return  (board[4] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[4] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[7] == board[8] && board[8] == board[9] && board[8] !=' ') {
-            return  (board[7] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[7] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[1] == board[4] && board[4] == board[7] && board[4] !=' ') {
-            return  (board[1] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[1] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[2] == board[5] && board[5] == board[8] && board[5] !=' ') {
-            return  (board[2] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[2] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[3] == board[6] && board[6] == board[9] && board[6] !=' ') {
-            return  (board[3] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[3] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[1] == board[5] && board[5] == board[9] && board[5] !=' ') {
-            return  (board[1] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[1] == playerLetter) ? PLAYER_1 : COMPUTER;
         } else if (board[3] == board[5] && board[5] == board[7] && board[5] !=' ') {
-            return  (board[3] == player1letter) ? PLAYER_1 : COMPUTER;
+            return  (board[3] == playerLetter) ? PLAYER_1 : COMPUTER;
         }else return 0;
     }
 
     static int getPosition(){
-        if ( board[1]==' ' && board[2]==player2letter && board[2] == board[3]
-                || board[1]==' ' && board[4]==player2letter && board[4] == board[7]
-                || board[1]==' ' && board[5]==player2letter && board[5] == board[9]) {
+        if ( board[1]==' ' && board[2]== computerLetter && board[2] == board[3]
+                || board[1]==' ' && board[4]== computerLetter && board[4] == board[7]
+                || board[1]==' ' && board[5]== computerLetter && board[5] == board[9]) {
             return 1;
-        } else if (board[2]==' ' && board[1]==player2letter && board[1] == board[3]
-                || board[2]==' ' && board[5]==player2letter && board[5] == board[8]) {
+        } else if (board[2]==' ' && board[1]== computerLetter && board[1] == board[3]
+                || board[2]==' ' && board[5]== computerLetter && board[5] == board[8]) {
             return 2;
-        } else if (board[3]==' ' && board[1]==player2letter && board[1] == board[2]
-                || board[3]==' ' && board[6]==player2letter && board[6] == board[9]
-                || board[3]==' ' && board[5]==player2letter && board[5] == board[7]) {
+        } else if (board[3]==' ' && board[1]== computerLetter && board[1] == board[2]
+                || board[3]==' ' && board[6]== computerLetter && board[6] == board[9]
+                || board[3]==' ' && board[5]== computerLetter && board[5] == board[7]) {
             return 3;
-        } else if (board[4]==' ' && board[1]==player2letter && board[1] == board[7]
-                || board[4]==' ' && board[5]==player2letter && board[5] == board[6]) {
+        } else if (board[4]==' ' && board[1]== computerLetter && board[1] == board[7]
+                || board[4]==' ' && board[5]== computerLetter && board[5] == board[6]) {
             return 4;
-        } else if (board[5]==' ' && board[1] == player2letter && board[1] == board[9]
-                || board[5]==' ' && board[2] == player2letter && board[2] == board[8]
-                || board[5]==' ' && board[3] == player2letter && board[3] == board[7]
-                || board[5]==' ' && board[4]==player2letter && board[4] == board[6]) {
+        } else if (board[5]==' ' && board[1] == computerLetter && board[1] == board[9]
+                || board[5]==' ' && board[2] == computerLetter && board[2] == board[8]
+                || board[5]==' ' && board[3] == computerLetter && board[3] == board[7]
+                || board[5]==' ' && board[4]== computerLetter && board[4] == board[6]) {
             return 5;
-        } else if (board[6]==' ' && board[3]==player2letter && board[3] == board[9]
-                || board[6]==' ' && board[4]==player2letter && board[4] == board[5]) {
+        } else if (board[6]==' ' && board[3]== computerLetter && board[3] == board[9]
+                || board[6]==' ' && board[4]== computerLetter && board[4] == board[5]) {
             return 6;
-        } else if (board[7]==' ' && board[1]==player2letter && board[1] == board[4]
-                || board[7]==' ' && board[8]==player2letter && board[8] == board[9]
-                || board[7]==' ' && board[5]==player2letter && board[5] == board[3]) {
+        } else if (board[7]==' ' && board[1]== computerLetter && board[1] == board[4]
+                || board[7]==' ' && board[8]== computerLetter && board[8] == board[9]
+                || board[7]==' ' && board[5]== computerLetter && board[5] == board[3]) {
             return 7;
-        } else if (board[8]==' ' && board[2]==player2letter && board[2] == board[5]
-                || board[8]==' ' && board[7]==player2letter && board[7] == board[9]) {
+        } else if (board[8]==' ' && board[2]== computerLetter && board[2] == board[5]
+                || board[8]==' ' && board[7]== computerLetter && board[7] == board[9]) {
             return 8;
-        } else if (board[9]==' ' && board[1]==player2letter && board[1] == board[5]
-                || board[9]==' ' && board[3]==player2letter && board[3] == board[6]
-                || board[9]==' ' && board[7]==player2letter && board[7] == board[8]) {
+        } else if (board[9]==' ' && board[1]== computerLetter && board[1] == board[5]
+                || board[9]==' ' && board[3]== computerLetter && board[3] == board[6]
+                || board[9]==' ' && board[7]== computerLetter && board[7] == board[8]) {
+            return 9;
+        }else if ( board[1]==' ' && board[2] == board[3]
+                || board[1]==' ' && board[4] == board[7]
+                || board[1]==' ' && board[5] == board[9]) {
+            return 1;
+        } else if (board[2]==' ' && board[1] == board[3]
+                || board[2]==' ' && board[5] == board[8]) {
+            return 2;
+        } else if (board[3]==' ' && board[1] == board[2]
+                || board[3]==' ' && board[6] == board[9]
+                || board[3]==' ' && board[5] == board[7]) {
+            return 3;
+        } else if (board[4]==' ' && board[1] == board[7]
+                || board[4]==' ' && board[5] == board[6]) {
+            return 4;
+        } else if (board[5]==' ' && board[1] == board[9]
+                || board[5]==' ' && board[2] == board[8]
+                || board[5]==' ' && board[3] == board[7]
+                || board[5]==' ' && board[4] == board[6]) {
+            return 5;
+        } else if (board[6]==' ' && board[3] == board[9]
+                || board[6]==' ' && board[4] == board[5]) {
+            return 6;
+        } else if (board[7]==' ' && board[1] == board[4]
+                || board[7]==' ' && board[8] == board[9]
+                || board[7]==' ' && board[5] == board[3]) {
+            return 7;
+        } else if (board[8]==' ' && board[2] == board[5]
+                || board[8]==' ' && board[7] == board[9]) {
+            return 8;
+        } else if (board[9]==' ' && board[1] == board[5]
+                || board[9]==' ' && board[3] == board[6]
+                || board[9]==' ' && board[7] == board[8]) {
             return 9;
         }else
         return  (int) ((Math.random()*10+1)%9);
