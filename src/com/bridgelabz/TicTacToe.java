@@ -47,11 +47,7 @@ public class TicTacToe {
         if (board[position] == ' ') {
             board[position] =player1letter;
         }else {
-            while (board[position] != ' '){
                 System.out.println(position+ " is already taken");
-                position=scanner.nextInt();
-            }
-            board[position] =player1letter;
         }
     }
 }
