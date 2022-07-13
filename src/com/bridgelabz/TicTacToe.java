@@ -20,8 +20,8 @@ public class TicTacToe {
         playerLetter =chooseLetter();
         computerLetter =(playerLetter == 'O') ? 'X': 'O';
 
-        System.out.println("player1letter = "+ playerLetter);
-        System.out.println("player2letter = "+ computerLetter);
+        System.out.println("player-letter = "+ playerLetter);
+        System.out.println("computer-Letter = "+ computerLetter);
 
         currentPlayer=doToss();
         showBoard();
@@ -44,23 +44,32 @@ public class TicTacToe {
            currentPlayer=(currentPlayer == PLAYER_1) ? COMPUTER : PLAYER_1;
            moveCount++;
 
-           if (moveCount == 9) {
+           if (winner == PLAYER_1) {
+               System.out.println("Congratulaions...\nyou won the game");
+               System.out.println("1.Play again \n2.Exit");
+               resetGame(scanner.nextInt());
+           }else if (winner == COMPUTER) {
+               System.out.println("you lost the game");
+               System.out.println("1.Play again \n2.Exit");
+               resetGame(scanner.nextInt());
+           }else if (moveCount == 9 && winner==0) {
                System.out.println("Match is draw ");
                System.out.println("1.Play again \n2.Exit");
                resetGame(scanner.nextInt());
            }
 
-       }
-        if (winner == PLAYER_1) {
-            System.out.println("Congratulaions...\nyou won the game");
-        }else if (winner == COMPUTER) {
-            System.out.println("you lost the game");
-        }
+
+       };
+
     }
 
     static char chooseLetter(){
-        System.out.println("choose letter : O or X");
-        return scanner.next().toUpperCase().charAt(0);
+        char letter=' ';
+        while (letter != 'O' && letter != 'X'){
+            System.out.println("choose letter : O or X");
+            letter= scanner.next().toUpperCase().charAt(0);
+        }
+        return letter;
     }
     static void showBoard(){
         System.out.println("showing board :");
@@ -104,7 +113,9 @@ public class TicTacToe {
             }
             winner=0;
             moveCount=0;
+            showBoard();
         }
+
     }
 
     static int checkWinner(){
