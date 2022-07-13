@@ -87,7 +87,7 @@ public class TicTacToe {
                     System.out.println(position+ " is already taken");
                     position=scanner.nextInt();
                 }else {
-                    position=(int) ((Math.random()*10+1)%9);
+                    position=getPosition();
                 }
             }
             board[position] =letter;
@@ -142,6 +142,13 @@ public class TicTacToe {
             int []corners=new int[]{1,3,7,9};
             int i=(int)(Math.random()*10)%4;
             position= corners[i];
+        }
+        return position;
+    }
+    static int getAvailablePosition(){
+        int position=(int)(Math.random()*10)%9+1;
+        while (board[position]!=' '){
+            position=(int)(Math.random()*10)%9+1;
         }
         return position;
     }
@@ -213,7 +220,16 @@ public class TicTacToe {
                 || board[9]==' ' && board[7] == board[8] && board[8]!=' ') {
             return 9;
         }else {
-            return getCornerPosition();
+            boolean isCornerAvailable=(board[1]==' ' || board[3]==' ' || board[7]==' ' || board[9]==' ');
+            boolean isCenterAvailable=(board[5]==' ');
+
+            if (isCornerAvailable) {
+                return getCornerPosition();
+            } else if (isCenterAvailable) {
+                return 5;
+            }else {
+                return getAvailablePosition();
+            }
         }
     }
 }
